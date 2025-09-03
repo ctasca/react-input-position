@@ -1,5 +1,6 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+
 const htmlWebpackPlugin = new HtmlWebpackPlugin({
   template: path.join(__dirname, "examples/src/index.html"),
   filename: "./index.html",
@@ -10,18 +11,19 @@ module.exports = {
   entry: path.join(__dirname, "examples/src/index.js"),
   output: {
     path: path.join(__dirname, "examples/dist"),
-    filename: "bundle.js"
+    filename: "bundle.js",
+    clean: true
   },
   module: {
     rules: [
       {
         test: /\.(js|jsx)$/,
-        use: ["babel-loader", "eslint-loader"],
+        use: ["babel-loader"],
         exclude: /node_modules/
       },
       {
         test: /\.(jpg|jpeg|png)$/,
-        use: "file-loader"
+        type: "asset/resource"
       },
       {
         test: /\.css$/,
@@ -34,6 +36,9 @@ module.exports = {
     extensions: [".js", ".jsx"]
   },
   devServer: {
-    port: 3001
+    port: process.env.PORT || 3001,
+    static: {
+      directory: path.join(__dirname, "examples/dist")
+    }
   }
 };
